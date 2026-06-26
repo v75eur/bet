@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BETPOWO</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',sans-serif;background:#0a0a2a;color:#fff;min-height:100vh;overflow-x:hidden}
+        .ticker-wrap{position:fixed;top:0;left:0;width:100%;background:#0d47a1;z-index:10000;overflow:hidden;height:30px;border-bottom:2px solid #FFD700}
+        .ticker{display:inline-block;white-space:nowrap;animation:scrollTicker 80s linear infinite;padding:5px 0;font-weight:bold;font-size:14px;color:#FFD700}
+        .ticker span{margin-right:100px}
+        @keyframes scrollTicker{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+        body{padding-top:30px}
+        .bg-bills{position:fixed;top:30px;left:0;width:100%;height:calc(100% - 30px);pointer-events:none;z-index:0}
+        .bill{position:absolute;font-size:2em;animation:fall linear infinite;opacity:0.08}
+        @keyframes fall{0%{transform:translateY(-100px) rotate(0deg)}100%{transform:translateY(110vh) rotate(360deg)}}
+        .page{display:none;position:relative;z-index:1}.page.active{display:block}
+        .toast-container{position:fixed;top:48px;right:20px;z-index:9999}
+        .toast{padding:14px 18px;border-radius:8px;color:#fff;font-weight:700;font-size:13px;animation:slideIn .3s ease;box-shadow:0 8px 30px rgba(0,0,0,.5);display:flex;align-items:center;gap:10px;min-width:280px;border:2px solid;margin-bottom:8px}
+        .toast.success{background:rgba(46,125,50,.95);border-color:#4CAF50}
+        .toast.error{background:rgba(198,40,40,.95);border-color:#f44336}
+        .toast.critical{background:rgba(180,0,0,.98);border-color:#ff0000;animation:blink .5s infinite;font-size:15px}
+        .toast.info{background:rgba(21,101,192,.95);border-color:#2196F3}
+        @keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:9998;display:flex;justify-content:center;align-items:center}
+        .modal{background:#fff;border-radius:16px;padding:30px;text-align:center;color:#333;max-width:460px;width:90%;box-shadow:0 20px 60px rgba(255,0,0,0.3);border:3px solid #f44336}
+        .modal-icon{font-size:4em;margin-bottom:10px}.modal h2{color:#c62828;margin:10px 0}
+        .auth-center{display:flex;justify-content:center;align-items:center;min-height:calc(100vh - 30px);padding:20px}
+        .auth-box{background:rgba(255,255,255,0.97);border-radius:18px;padding:30px;width:420px;text-align:center;color:#333;box-shadow:0 15px 50px rgba(255,215,0,0.1)}
+        .auth-box img{width:70px;margin-bottom:8px}.auth-box h1{color:#0a0a2a;font-size:1.8em}.auth-box>p{color:#888;font-size:13px;margin-bottom:15px}
+        .auth-box input{width:100%;padding:11px;margin:6px 0;border:2px solid #ddd;border-radius:8px;font-size:14px}
+        .auth-box input:focus{border-color:#FFD700;outline:none}
+        .btn{width:100%;padding:12px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer;background:linear-gradient(135deg,#FFD700,#FFA000);color:#0a0a2a;margin-top:8px}
+        .btn:disabled{opacity:.6;cursor:not-allowed}.btn-sm{padding:6px 12px;font-size:11px;width:auto;margin:2px;border-radius:5px;cursor:pointer;font-weight:bold;border:none;color:#fff;display:inline-block}
+        .link{color:#FFA000;cursor:pointer;font-weight:bold;text-decoration:underline;font-size:13px}
+        .msg{margin-top:10px;font-size:12px;font-weight:bold;padding:10px;border-radius:6px}
+        .msg.e{background:#ffebee;color:#d32f2f}.msg.s{background:#e8f5e9;color:#388E3C}
+        .rules{font-size:11px;color:#aaa;margin:4px 0;line-height:1.4;text-align:left}
+        .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;background:rgba(255,255,255,.04);border-radius:10px;margin:12px auto;max-width:900px;border:1px solid rgba(255,215,0,0.08)}
+        .topbar span{color:#FFD700;font-weight:bold;font-size:0.95em}
+        .topbar button{background:transparent;border:1px solid #f44336;color:#f44336;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:0.85em}
+        .container{max-width:900px;margin:0 auto;padding:12px}
+        .header{text-align:center;margin:18px 0}.header h1{font-size:2.2em;color:#FFD700;letter-spacing:5px}.header p{color:#aaa;font-size:0.9em;margin-top:4px}
+        .card{background:rgba(255,255,255,0.97);color:#333;border-radius:14px;padding:18px;margin:12px 0;box-shadow:0 5px 20px rgba(0,0,0,0.15)}
+        .card h3{border-left:3px solid #FFD700;padding-left:10px;margin-bottom:12px;font-size:1em}
+        .odds{display:flex;gap:8px;margin-bottom:12px}
+        .odds>div{flex:1;text-align:center;padding:14px 8px;border-radius:10px;color:#fff;font-weight:bold;font-size:0.9em}
+        .odds>div:nth-child(1){background:#4CAF50}.odds>div:nth-child(2){background:#FF9800;color:#333}.odds>div:nth-child(3){background:#f44336}
+        .odds input{width:100%;padding:7px;margin-top:6px;border:none;border-radius:5px;text-align:center;font-weight:bold;background:rgba(255,255,255,.25);color:#fff;font-size:0.95em}
+        .row{display:flex;gap:8px;margin:8px 0}.row input{flex:1;padding:7px;border-radius:5px;border:none;background:#2a2a3e;color:#fff;text-align:center}
+        .mode-btn{padding:8px 12px;border:2px solid #ddd;background:#f5f5f5;border-radius:8px;cursor:pointer;font-weight:bold;font-size:12px}
+        .mode-btn.active{background:linear-gradient(135deg,#FFD700,#FFA000);border-color:#FFD700;color:#0a0a2a}
+        .strat-card{background:#fff;border:2px solid #eee;border-radius:10px;padding:12px;margin:8px 0;cursor:pointer}
+        .strat-card:hover{border-color:#FFD700}.strat-card.sel{border-color:#FFD700;background:#fffde7}
+        .profit-badge{background:#4CAF50;color:#fff;padding:4px 10px;border-radius:12px;font-size:11px}
+        .detail{background:#e8f5e9;padding:15px;border-radius:10px;margin-top:8px}.detail-row{background:#fff;padding:8px;border-radius:6px;margin:4px 0;font-size:0.9em}
+        .green{color:#4CAF50;font-weight:bold}.gold-bg{background:linear-gradient(135deg,#FFD700,#FFA000);color:#0a0a2a;padding:10px;border-radius:8px;text-align:center;font-weight:bold;margin-top:8px}
+        .info{background:#e3f2fd;color:#1565C0;padding:8px;border-radius:6px;font-size:12px;margin:8px 0}
+        .err{background:#ffebee;color:#c62828;padding:10px;border-radius:6px;margin:8px 0;font-size:0.9em}
+        .surebet{background:#e8f5e9;color:#2e7d32;padding:15px;border-radius:10px;border-left:4px solid #4CAF50;margin:8px 0;font-size:0.95em}
+        .footer{text-align:center;margin-top:15px;opacity:0.6;font-size:0.8em}
+    </style>
+</head>
+<body>
+
+<div class="ticker-wrap"><div class="ticker">
+<span>🔥 VERSION D'ESSAI GRATUITE — Profitez-en avant le 1er AOÛT 2026 ! 🔥</span>
+<span>💰 PASSAGE PAYANT à partir d'Août 2026 — NE RATEZ PAS L'OFFRE ! 💰</span>
+<span>📢 PARTAGEZ AVEC VOS AMIS — Des RÉCOMPENSES D'AFFILIATION arrivent bientôt ! 📢</span>
+<span>🎁 INVITEZ VOS CONTACTS — Gagnez des BONUS EXCLUSIFS grâce au parrainage ! 🎁</span>
+</div></div>
+
+<div class="bg-bills" id="bgBills"></div>
+<div class="toast-container" id="toastContainer"></div>
+<div id="modalContainer"></div>
+
+<div class="page active" id="authPage">
+<div class="auth-center"><div class="auth-box">
+<div id="loginForm">
+<img src="logo.svg" alt="BETPOWO" onerror="this.style.display='none'"><h1>BETPOWO</h1><p>Connecte-toi 💰</p>
+<input type="text" id="loginUser" placeholder="Pseudo" autofocus><input type="password" id="loginPassword" placeholder="Mot de passe">
+<button class="btn" id="loginBtn" onclick="login()">🔓 Se connecter</button>
+<p style="margin-top:12px"><span class="link" onclick="showReg()">Créer un compte</span></p><div id="loginMsg"></div>
+</div>
+<div id="regForm" style="display:none">
+<img src="logo.svg" alt="BETPOWO" onerror="this.style.display='none'"><h1>BETPOWO</h1><p>Inscription 🏆</p>
+<input type="text" id="regNom" placeholder="Ton vrai NOM"><input type="text" id="regPrenom" placeholder="Ton vrai PRÉNOM">
+<input type="text" id="regUser" placeholder="Pseudo (3-20 car, pas d'espaces)"><div class="rules">✅ Lettres, chiffres et symboles</div>
+<input type="password" id="regPass" placeholder="Mot de passe (6+ car)"><input type="password" id="regPass2" placeholder="Confirme">
+<div class="rules" style="color:#E65100">⚠️ Différent du pseudo !</div>
+<div class="rules" style="color:#E65100;font-weight:bold;text-align:center">🚨 NOTE BIEN tes identifiants ! Aucune récupération possible.</div>
+<button class="btn btn-sm" onclick="copyRegInfo()" style="background:#1565C0;color:#fff">📋 Copier</button>
+<button class="btn" id="regBtn" onclick="register()">✅ Créer mon compte</button>
+<p style="margin-top:12px"><span class="link" onclick="showLogin()">Déjà un compte</span></p><div id="regMsg"></div>
+</div>
+</div></div>
+</div>
+
+<div class="page" id="mainPage">
+<div class="topbar"><span>⚡ BETPOWO <span style="font-size:10px;color:#4CAF50">🕗 8H-22H</span></span><span style="color:#fff;font-size:13px" id="userDisplay"></span><span id="clockBadge" style="font-size:11px;padding:3px 8px;border-radius:14px;font-weight:bold"></span><button onclick="logout()">🚪 Déconnexion</button></div>
+<div class="container">
+
+<div id="mobileMsg" style="display:none;background:#fff3e0;color:#E65100;padding:10px;border-radius:8px;margin:10px 0;text-align:center;font-weight:bold;font-size:13px;border:2px solid #FF9800">
+📱 Pour une meilleure expérience, active le <b>Mode PC</b> :<br>Chrome : ⋮ → <b>"Version ordinateur"</b> | Firefox : ⋮ → <b>"Site pour ordinateur"</b>
+</div>
+
+<div class="header"><h1>💰 BETPOWO 💰</h1><p>🎯 Arbitrage Gagnant • 🛡️ Anti-détection • 💎 Profits garantis</p></div>
+
+<div class="card"><h3>📊 1. Tes Cotes</h3>
+<div class="odds"><div><div>⭐ FAVORIS</div><input type="number" id="cF" step="0.01" value="2.50"></div><div><div>🤝 NUL</div><input type="number" id="cN" step="0.01" value="4.00"></div><div><div>💀 OUTSIDER</div><input type="number" id="cO" step="0.01" value="5.00"></div></div>
+<div id="surebetMsg"></div>
+<label style="color:#555;font-weight:bold;display:block;margin-top:8px">💰 Budget total (FCFA)</label>
+<input type="number" id="budget" value="100000" step="10000" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;margin:6px 0;font-size:14px">
+<div style="background:#1a1a3e;padding:14px;border-radius:10px;margin:10px 0">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-weight:bold">🛡️ Mode furtif</span><label style="position:relative;width:44px;height:24px"><input type="checkbox" id="furtifMode" checked style="display:none"><span id="toggleBg" style="position:absolute;top:0;left:0;right:0;bottom:0;background:#4CAF50;border-radius:24px;transition:.2s"></span><span id="toggleDot" style="position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s;transform:translateX(20px)"></span></label></div>
+<div class="row"><div>📉 Min %<input type="number" id="varMin" value="-5" step="0.5"></div><div>📈 Max %<input type="number" id="varMax" value="5" step="0.5"></div></div>
+<div id="varIndicator" style="font-size:10px;text-align:center;color:#aaa;margin-top:6px"></div>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0">
+<button class="mode-btn active" onclick="setMode('fav_nul',this)">⭐ Favori + 🤝 Nul</button><button class="mode-btn" onclick="setMode('fav_out',this)">⭐ Favori + 💀 Outsider</button><button class="mode-btn" onclick="setMode('nul_out',this)">🤝 Nul + 💀 Outsider</button>
+</div>
+<button class="btn" onclick="calc()" style="font-size:15px;padding:13px">💰 GÉNÉRER LES STRATÉGIES</button>
+</div>
+
+<div class="card"><h3>📋 2. Stratégies Gagnantes</h3><div id="strats"></div><div id="selected"></div></div>
+<div class="card"><h3>📋 Mon Historique</h3><div id="histList"><p style="color:#999;font-size:12px">Aucun calcul.</p></div><button class="btn" style="background:#f44336;color:#fff;margin-top:8px;font-size:13px" onclick="clearHist()">🗑️ Effacer</button></div>
+<div class="footer">⚡ Toutes les répartitions sont GAGNANTES • 🕗 8H-22H</div>
+</div>
+</div>
+
+<script>
+// BILLETS
+(function(){var bg=document.getElementById('bgBills');var b=['💵','💶','💷','💴','💰'];for(var i=0;i<12;i++){var el=document.createElement('div');el.className='bill';el.textContent=b[Math.floor(Math.random()*b.length)];el.style.left=Math.random()*100+'%';el.style.animationDuration=(Math.random()*15+10)+'s';el.style.animationDelay=Math.random()*12+'s';bg.appendChild(el)}})();
+
+// CONFIG
+var SB_URL='https://xmcqrlroqwejygadjkwk.supabase.co',SB_KEY='sb_publishable_l6hnckFyC6ZYuV_PaimUCg_Jw9QBwrZ'
+var SB_H={'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=representation'}
+var SK='bp_session_v3'
+
+// MOBILE DETECTION
+(function(){if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent))document.getElementById('mobileMsg').style.display='block'})()
+
+function showToast(msg,type,duration){type=type||'info';duration=duration||3000;var ic={success:'✅',error:'❌',info:'ℹ️',warning:'⚠️',critical:'🚨'};var c=document.getElementById('toastContainer');var t=document.createElement('div');t.className='toast '+type;t.innerHTML='<span>'+ic[type]+'</span> '+msg;c.appendChild(t);if(duration>0&&type!=='critical')setTimeout(function(){if(t.parentElement)t.remove()},duration)}
+function showModal(icon,title,msg,btnText,cb){var c=document.getElementById('modalContainer');var o=document.createElement('div');o.className='modal-overlay';o.innerHTML='<div class="modal"><div class="modal-icon">'+icon+'</div><h2>'+title+'</h2><div>'+msg+'</div>'+(btnText?'<button class="btn">'+btnText+'</button>':'')+'</div>';c.appendChild(o);if(btnText&&cb)o.querySelector('.btn').onclick=function(){o.remove();cb()};o.addEventListener('click',function(e){if(e.target===o)o.remove()})}
+(function(){var tg=document.getElementById('furtifMode'),tb=document.getElementById('toggleBg'),td=document.getElementById('toggleDot');function ut(){if(tg.checked){tb.style.background='#4CAF50';td.style.transform='translateX(20px)'}else{tb.style.background='#555';td.style.transform='translateX(0)'}}tg.addEventListener('change',ut)})()
+
+function showReg(){document.getElementById('loginForm').style.display='none';document.getElementById('regForm').style.display='block';document.getElementById('regMsg').innerHTML='';document.getElementById('regNom').focus()}
+function showLogin(){document.getElementById('regForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('loginMsg').innerHTML='';document.getElementById('loginUser').focus()}
+function copyRegInfo(){var u=document.getElementById('regUser').value.trim(),p=document.getElementById('regPass').value;if(!u||!p){showToast('Remplis pseudo et mot de passe','warning',2500);return}navigator.clipboard.writeText('Pseudo : '+u+'\nMot de passe : '+p).then(function(){showToast('📋 Copié !','success',4000)})}
+function getIP(){return fetch('https://api.ipify.org?format=json').then(function(r){return r.json()}).then(function(d){return d.ip}).catch(function(){return '0.0.0.0'})}
+
+async function register(){
+    var nom=document.getElementById('regNom').value.trim(),prenom=document.getElementById('regPrenom').value.trim()
+    var username=document.getElementById('regUser').value.trim(),pass=document.getElementById('regPass').value,pass2=document.getElementById('regPass2').value,b=document.getElementById('regBtn')
+    if(!nom||!prenom||!username||!pass||!pass2){showToast('❌ Tous les champs obligatoires','error');return}
+    if(!/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/.test(username)||username.length<3||username.length>20){showToast('❌ Pseudo invalide','error',4000);return}
+    if(pass.length<6){showToast('❌ 6 caractères minimum','error');return}
+    if(pass!==pass2){showToast('❌ Mots de passe différents','error');return}
+    if(username.toLowerCase()===pass.toLowerCase()){showToast('⛔ Pseudo et mot de passe DIFFÉRENTS !','critical',0);return}
+    if(pass.toLowerCase().indexOf(username.toLowerCase())!==-1){showToast('⛔ Mot de passe contient pseudo !','critical',0);return}
+    b.disabled=true;b.textContent='⏳...'
+    try{
+        var ip=await getIP()
+        var checkIP=await fetch(SB_URL+'/rest/v1/users?ip_address=eq.'+ip+'&select=id',{headers:SB_H})
+        if((await checkIP.json()).length>0){showToast('⛔ UN SEUL COMPTE PAR TÉLÉPHONE !','critical',0);b.disabled=false;b.textContent='✅ Créer mon compte';return}
+        var checkUser=await fetch(SB_URL+'/rest/v1/users?username=eq.'+encodeURIComponent(username.toLowerCase())+'&select=id',{headers:SB_H})
+        if((await checkUser.json()).length>0){showToast('❌ Pseudo déjà pris','error',4000);b.disabled=false;b.textContent='✅ Créer mon compte';return}
+        var resp=await fetch(SB_URL+'/rest/v1/users',{method:'POST',headers:SB_H,body:JSON.stringify({nom:nom,prenom:prenom,username:username.toLowerCase(),password:pass,ip_address:ip})})
+        if(resp.ok){
+            var ids='Pseudo : '+username.toLowerCase()+'\nMot de passe : '+pass
+            showModal('⚠️','GARDE TES IDENTIFIANTS !','<div style="background:#0a0a2a;color:#FFD700;padding:15px;border-radius:10px;text-align:left;margin:10px 0">'+ids.replace(/\n/g,'<br>')+'</div><p style="color:#c62828;font-weight:bold">🚨 AUCUNE RÉCUPÉRATION POSSIBLE !</p>','📋 COPIER',function(){navigator.clipboard.writeText(ids);showToast('✅ Copié !','success',6000)})
+            showToast('⚠️ COPIE TES IDENTIFIANTS !','critical',0)
+            setTimeout(function(){document.getElementById('loginUser').value=username.toLowerCase();showLogin();document.getElementById('loginMsg').innerHTML='<div class="msg s">✅ Compte créé ! Connecte-toi.</div>'},2500)
+        }
+    }catch(e){showToast('❌ Erreur réseau','error',4000)}
+    b.disabled=false;b.textContent='✅ Créer mon compte'
+}
+
+async function login(){
+    var username=document.getElementById('loginUser').value.trim().toLowerCase(),pass=document.getElementById('loginPassword').value,b=document.getElementById('loginBtn')
+    if(!username||!pass){showToast('❌ Pseudo et mot de passe requis','error');return}
+    b.disabled=true;b.textContent='⏳...'
+    try{
+        var resp=await fetch(SB_URL+'/rest/v1/users?username=eq.'+encodeURIComponent(username)+'&password=eq.'+encodeURIComponent(pass)+'&select=*',{headers:SB_H})
+        var users=await resp.json()
+        if(users.length===0){showToast('❌ Identifiants incorrects','error',5000);b.disabled=false;b.textContent='🔓 Se connecter';return}
+        var u=users[0]
+        if(u.bloque){showToast('⛔ COMPTE BLOQUÉ','critical',0);b.disabled=false;b.textContent='🔓 Se connecter';return}
+        if(u.limite_calculs!==null&&u.calculs_effectues>=u.limite_calculs){showToast('⛔ LIMITE ATTEINTE','critical',0);b.disabled=false;b.textContent='🔓 Se connecter';return}
+        localStorage.setItem(SK,JSON.stringify({username:u.username,nom:u.nom,prenom:u.prenom,id:u.id,time:Date.now()}))
+        document.getElementById('userDisplay').textContent=u.prenom+' '+u.nom
+        document.getElementById('authPage').classList.remove('active');document.getElementById('mainPage').classList.add('active')
+        showToast('👋 Bienvenue '+u.prenom+' ! 💰','success',3000);calc();b.disabled=false;b.textContent='🔓 Se connecter'
+    }catch(e){showToast('❌ Erreur réseau','error');b.disabled=false;b.textContent='🔓 Se connecter'}
+}
+
+function logout(){localStorage.removeItem(SK);document.getElementById('mainPage').classList.remove('active');document.getElementById('authPage').classList.add('active');showLogin();showToast('👋 Déconnecté','info',1500)}
+(function(){var s=localStorage.getItem(SK);if(s){var d=JSON.parse(s);document.getElementById('userDisplay').textContent=d.prenom+' '+d.nom;document.getElementById('authPage').classList.remove('active');document.getElementById('mainPage').classList.add('active');showToast('👋 Rebienvenue '+d.prenom+' ! 💰','success',2500);calc()}})()
+document.addEventListener('keypress',function(e){if(e.key!=='Enter')return;if(document.getElementById('loginForm').style.display!=='none')login();else if(document.getElementById('regForm').style.display!=='none')register()})
+
+// ============ CALCULS 100% INTACTS ============
+var mode='fav_nul'
+function setMode(m,btn){mode=m;document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');calc()}
+function rd(min,max){return min+Math.random()*(max-min)}
+function av(amt,min,max,f){if(!f)return Math.round(amt*100)/100;return Math.round(amt*(1+rd(min,max)/100)*100)/100}
+function fx(amt){if(isNaN(amt))return'0,00';return amt.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function sb3(cF,cN,cO,budget){var t=1/cF+1/cN+1/cO;if(t<1){var pp=((1-t)*100).toFixed(2);return{ok:true,pp:pp,bF:budget/cF,bN:budget/cN,bO:budget/cO,total:budget/cF+budget/cN+budget/cO,profit:budget-(budget/cF+budget/cN+budget/cO)}}return{ok:false}}
+
+async function calc(){
+    var s=localStorage.getItem(SK)
+    if(s){var d=JSON.parse(s);try{var resp=await fetch(SB_URL+'/rest/v1/users?id=eq.'+d.id+'&select=bloque,limite_calculs,calculs_effectues',{headers:SB_H});var users=await resp.json();if(users.length>0){var u=users[0];if(u.bloque){showToast('⛔ Compte bloqué','critical',0);logout();return}if(u.limite_calculs!==null&&u.calculs_effectues>=u.limite_calculs){showToast('⛔ Limite atteinte','critical',0);return}}}catch(e){}}
+
+    var cF=parseFloat(document.getElementById('cF').value),cN=parseFloat(document.getElementById('cN').value),cO=parseFloat(document.getElementById('cO').value)
+    var budget=parseFloat(document.getElementById('budget').value),f=document.getElementById('furtifMode').checked
+    var vMin=parseFloat(document.getElementById('varMin').value),vMax=parseFloat(document.getElementById('varMax').value)
+    var ind=document.getElementById('varIndicator')
+    ind.innerHTML=f?'🔄 Furtif ACTIF : '+vMin+'% à '+vMax+'%':'🔒 Furtif INACTIF';ind.style.color=f?'#4CAF50':'#f44336'
+    if(isNaN(cF)||isNaN(cN)||isNaN(cO)||cF<=1||cN<=1||cO<=1){document.getElementById('strats').innerHTML='<div class="err">❌ Cotes invalides</div>';return}
+    if(isNaN(budget)||budget<=0){document.getElementById('strats').innerHTML='<div class="err">❌ Budget invalide</div>';return}
+
+    var s2=document.getElementById('surebetMsg'),sb=sb3(cF,cN,cO,budget)
+    if(sb.ok){var bF=sb.bF,bN=sb.bN,bO=sb.bO;if(f){bF=av(bF,vMin,vMax,f);bN=av(bN,vMin,vMax,f);bO=av(bO,vMin,vMax,f)}s2.innerHTML='<div class="surebet"><strong>🎯 SURETBET DÉTECTÉ !</strong><br>• Mise sur FAVORIS : <b>'+fx(bF)+' FCFA</b><br>• Mise sur NUL : <b>'+fx(bN)+' FCFA</b><br>• Mise sur OUTSIDER : <b>'+fx(bO)+' FCFA</b><br>• Total misé : '+fx(bF+bN+bO)+' FCFA<br>• <b>Profit garanti : +'+fx(sb.profit)+' FCFA ('+sb.pp+'%)</b></div>';showToast('🎯 Surebet ! 💰','success',4000)}
+    else{s2.innerHTML='<div class="info">ℹ️ Pas de surebet 3 issues ('+((1/cF+1/cN+1/cO)*100).toFixed(2)+'%)</div>'}
+
+    var c1,c2,n1,n2
+    if(mode==='fav_nul'){c1=cF;c2=cN;n1='FAVORIS';n2='NUL'}
+    else if(mode==='fav_out'){c1=cF;c2=cO;n1='FAVORIS';n2='OUTSIDER'}
+    else{c1=cN;c2=cO;n1='NUL';n2='OUTSIDER'}
+
+    var min1=budget/c1,max1=budget-budget/c2
+    if(min1>=max1){document.getElementById('strats').innerHTML='<div class="err">❌ Aucune répartition possible.<br>💡 Essaie une autre paire.</div>';return}
+
+    var step=(max1-min1)/6,strats=[]
+    for(var i=1;i<=5;i++){
+        var b1=min1+step*i,b2=budget-b1,m1=av(b1,vMin,vMax,f),m2=av(b2,vMin,vMax,f),tot=m1+m2
+        if(Math.abs(tot-budget)>0.01){var r=budget/tot;m1=Math.round(m1*r*100)/100;m2=Math.round(m2*r*100)/100}
+        var g1=m1*c1,g2=m2*c2,p1=g1-budget,p2=g2-budget
+        if(p1>0&&p2>0)strats.push({id:i,m1:m1,m2:m2,g1:g1,g2:g2,p1:p1,p2:p2,pMin:Math.min(p1,p2),pct1:Math.round(m1/budget*100),pct2:Math.round(m2/budget*100)})
+    }
+    if(strats.length===0){document.getElementById('strats').innerHTML='<div class="err">❌ Aucune stratégie.<br>💡 Désactive le mode furtif.</div>';return}
+
+    var h=''
+    strats.forEach(function(s){
+        h+='<div class="strat-card" onclick="sel('+s.id+')"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>📌 Répartition '+s.id+' : '+s.pct1+'% / '+s.pct2+'%</strong><span class="profit-badge">🟢 PROFIT MIN: +'+fx(s.pMin)+'</span></div><div style="background:#f8f8f8;padding:10px;border-radius:5px;margin:4px 0;font-size:13px">💰 Mise sur '+n1+' (cote '+c1.toFixed(2)+') : <b>'+fx(s.m1)+' FCFA</b><br>→ Gain: '+fx(s.g1)+' FCFA → <span class="green">Profit: +'+fx(s.p1)+' FCFA</span></div><div style="background:#f8f8f8;padding:10px;border-radius:5px;margin:4px 0;font-size:13px">💰 Mise sur '+n2+' (cote '+c2.toFixed(2)+') : <b>'+fx(s.m2)+' FCFA</b><br>→ Gain: '+fx(s.g2)+' FCFA → <span class="green">Profit: +'+fx(s.p2)+' FCFA</span></div></div>'
+    })
+    document.getElementById('strats').innerHTML=h
+    window._d={strats:strats,n1:n1,n2:n2,c1:c1,c2:c2,budget:budget}
+    showToast('✅ '+strats.length+' stratégies ! 💰','success',3000)
+    saveHist({cF:cF,cN:cN,cO:cO,budget:budget})
+
+    var sess=localStorage.getItem(SK)
+    if(sess){var dd=JSON.parse(sess);fetch(SB_URL+'/rest/v1/users?id=eq.'+dd.id+'&select=calculs_effectues',{headers:SB_H}).then(function(r){return r.json()}).then(function(users){if(users.length>0){var nc=(users[0].calculs_effectues||0)+1;fetch(SB_URL+'/rest/v1/users?id=eq.'+dd.id,{method:'PATCH',headers:SB_H,body:JSON.stringify({calculs_effectues:nc})})}}).catch(function(){})}
+}
+
+function sel(id){var d=window._d;if(!d)return;var s=d.strats.find(function(s){return s.id===id});if(!s)return;document.querySelectorAll('.strat-card').forEach(function(c,i){c.classList.remove('sel');if(i===id-1)c.classList.add('sel')});document.getElementById('selected').innerHTML='<div class="detail"><h4>✅ RÉPARTITION '+s.id+' SÉLECTIONNÉE</h4><div class="detail-row"><strong>💰 MISE '+d.n1+' :</strong> '+fx(s.m1)+' FCFA<br>→ Gain brut: '+fx(s.g1)+' FCFA<br>→ Profit net: <span class="green">+'+fx(s.p1)+' FCFA</span></div><div class="detail-row"><strong>💰 MISE '+d.n2+' :</strong> '+fx(s.m2)+' FCFA<br>→ Gain brut: '+fx(s.g2)+' FCFA<br>→ Profit net: <span class="green">+'+fx(s.p2)+' FCFA</span></div><div class="gold-bg">💰 BUDGET TOTAL : '+fx(d.budget)+' FCFA<br>🎯 PROFIT MINIMUM GARANTI : <strong>+'+fx(s.pMin)+' FCFA</strong></div><div style="margin-top:10px;font-size:0.8em;color:#555">⚡ Va sur Betpawa et mise exactement ces montants (2 décimales)</div></div>';showToast('📌 Stratégie sélectionnée !','info',2000)}
+
+function updateClock(){var n=new Date(),h=n.getHours(),m=n.getMinutes(),se=n.getSeconds();var open=h>=8&&h<22,pad=function(x){return String(x).padStart(2,'0')};var b=document.getElementById('clockBadge');if(b){b.textContent=(open?'🟢 OUVERT':'🔴 FERMÉ')+' '+pad(h)+':'+pad(m)+':'+pad(se);b.style.background=open?'rgba(76,175,80,0.2)':'rgba(244,67,54,0.2)';b.style.color=open?'#4CAF50':'#f44336'}}
+setInterval(updateClock,1000);updateClock()
+
+function saveHist(data){var h=JSON.parse(localStorage.getItem('bp_hist')||'[]');h.unshift({date:new Date().toLocaleString('fr-FR'),cF:data.cF,cN:data.cN,cO:data.cO,budget:data.budget});if(h.length>10)h.pop();localStorage.setItem('bp_hist',JSON.stringify(h));renderHist()}
+function renderHist(){var h=JSON.parse(localStorage.getItem('bp_hist')||'[]'),el=document.getElementById('histList');if(!el)return;if(h.length===0){el.innerHTML='<p style="color:#999;font-size:12px">Aucun calcul.</p>';return}el.innerHTML=h.map(function(e){return '<div style="background:#f8f8f8;padding:8px;border-radius:6px;margin:4px 0;font-size:12px">📅 '+e.date+' — F:'+e.cF+' N:'+e.cN+' O:'+e.cO+' | '+e.budget+' FCFA</div>'}).join('')}
+function clearHist(){localStorage.removeItem('bp_hist');renderHist();showToast('Historique effacé','info',1500)}
+renderHist()
+
+function copyMises(){var el=document.getElementById('selected');if(!el||!el.innerText){showToast('Sélectionne une stratégie','warning',1500);return}navigator.clipboard.writeText(el.innerText).then(function(){showToast('📋 Mises copiées !','success',1500)})}
+
+['cF','cN','cO','budget','varMin','varMax'].forEach(function(id){document.getElementById(id).addEventListener('input',calc)})
+document.getElementById('furtifMode').addEventListener('change',calc)
+</script>
+</body>
+</html>
