@@ -14,7 +14,7 @@ def heure_benin():
 def check_horaires():
     h = heure_benin()
     # Si c'est un ping cron-job.org, on le rejette la nuit
-    if 'cron-job.org' in request.headers.get('User-Agent', ''):
+    if request.headers.get('User-Agent', '') or request.headers.get('X-Forwarded-For', ''):
         if h < 8:
             return 'SLEEP', 503  # Render verra une erreur et mettra en veille
 
