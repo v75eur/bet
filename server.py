@@ -10,16 +10,18 @@ def heure_benin():
     tz = pytz.timezone('Africa/Porto-Novo')
     return datetime.now(tz).hour
 
-@app.before_request
-def check_horaires():
+@app.route('/health')
+def health():
+    # TOUJOURS 200 - sinon Render endort le service
     h = heure_benin()
-    # Si c'est un ping cron-job.org, on le rejette la nuit
-    if request.headers.get('User-Agent', '') or request.headers.get('X-Forwarded-For', ''):
-        if h < 8:
-            return 'SLEEP', 503  # Render verra une erreur et mettra en veille
+    status = "OK - Ouvert" if h >= 8 else "PAUSE - Reprise 8H Benin"
+    return status, 200
 
 @app.route('/')
 def index():
+    h = heure_benin()
+    if h < 8:
+        return '<h2 style="text-align:center;margin-top:50px">🔴 BETPOWO ouvre à 8H Bénin</h2>', 503
     return render_template('index.html')
 
 @app.route('/logo.svg')
