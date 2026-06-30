@@ -184,6 +184,7 @@
 
 <div class="card"><h3>📊 1. Tes Cotes</h3>
 <div class="odds"><div><div>⭐ FAVORIS</div><input type="number" id="cF" step="0.01" value="2.50"></div><div><div>🤝 NUL</div><input type="number" id="cN" step="0.01" value="4.00"></div><div><div>💀 OUTSIDER</div><input type="number" id="cO" step="0.01" value="5.00"></div></div>
+<div id="margeBadge" style="text-align:center;margin:8px 0;font-size:12px;font-weight:bold;padding:8px;border-radius:8px"></div>
 <div id="surebetMsg"></div>
 <label style="color:#555;font-weight:bold;display:block;margin-top:8px">💰 Budget total (FCFA)</label>
 <input type="number" id="budget" value="100000" step="10000" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;margin:6px 0;font-size:14px">
@@ -520,6 +521,23 @@ async function calc(){
     ind.innerHTML=f?'🔄 Furtif ACTIF : '+vMin+'% à '+vMax+'%':'🔒 Furtif INACTIF';ind.style.color=f?'#4CAF50':'#f44336'
     if(isNaN(cF)||isNaN(cN)||isNaN(cO)||cF<=1||cN<=1||cO<=1){document.getElementById('strats').innerHTML='<div class="err">❌ Cotes invalides</div>';return}
     if(isNaN(budget)||budget<=0){document.getElementById('strats').innerHTML='<div class="err">❌ Budget invalide</div>';return}
+
+    var margeBadge=document.getElementById('margeBadge')
+    var sommeInverses = 1/cF+1/cN+1/cO
+    var margePct = (sommeInverses-1)*100
+    if(margePct<0){
+        margeBadge.innerHTML='🎯 SUREBET DÉTECTÉ — Marge: '+margePct.toFixed(2)+'%'
+        margeBadge.style.background='#e8f5e9';margeBadge.style.color='#2e7d32'
+    } else if(margePct<3){
+        margeBadge.innerHTML='🟢 Marge FAIBLE: '+margePct.toFixed(2)+'% — Bon match à surveiller'
+        margeBadge.style.background='#e8f5e9';margeBadge.style.color='#2e7d32'
+    } else if(margePct<7){
+        margeBadge.innerHTML='🟡 Marge MOYENNE: '+margePct.toFixed(2)+'%'
+        margeBadge.style.background='#fff3e0';margeBadge.style.color='#E65100'
+    } else {
+        margeBadge.innerHTML='🔴 Marge ÉLEVÉE: '+margePct.toFixed(2)+'% — Bookmaker prend une grosse marge'
+        margeBadge.style.background='#ffebee';margeBadge.style.color='#c62828'
+    }
 
     var s2=document.getElementById('surebetMsg'),sb=sb3(cF,cN,cO,budget)
     if(sb.ok){var bF=sb.bF,bN=sb.bN,bO=sb.bO;if(f){bF=av(bF,vMin,vMax,f);bN=av(bN,vMin,vMax,f);bO=av(bO,vMin,vMax,f)}s2.innerHTML='<div class="surebet"><strong>🎯 SURETBET DÉTECTÉ !</strong><br>• Mise sur FAVORIS : <b>'+fx(bF)+' FCFA</b><br>• Mise sur NUL : <b>'+fx(bN)+' FCFA</b><br>• Mise sur OUTSIDER : <b>'+fx(bO)+' FCFA</b><br>• Total misé : '+fx(bF+bN+bO)+' FCFA<br>• <b>Profit garanti : +'+fx(sb.profit)+' FCFA ('+sb.pp+'%)</b></div>';showToast('🎯 Surebet ! 💰','success',4000)}
