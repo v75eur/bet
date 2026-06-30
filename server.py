@@ -21,7 +21,7 @@ def health():
 def index():
     h = heure_benin()
     if h < 8:
-        return '<h2 style="text-align:center;margin-top:50px">🔴 BETPOWO ouvre à 8H Bénin</h2>', 503
+        return '<h2 style="text-align:center;margin-top:50px;color:#fff;background:#0a0a2a;padding:50px">🔴 BETPOWO ouvre à 8H Bénin</h2>', 503
     return render_template('index.html')
 
 @app.route('/logo.svg')

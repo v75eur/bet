@@ -24,23 +24,27 @@
         .toast.info{background:rgba(21,101,192,.95);border-color:#2196F3}
         @keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
-        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:9998;display:flex;justify-content:center;align-items:center}
-        .modal{background:#fff;border-radius:16px;padding:30px;text-align:center;color:#333;max-width:460px;width:90%;box-shadow:0 20px 60px rgba(255,0,0,0.3);border:3px solid #f44336}
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:9998;display:flex;justify-content:center;align-items:center;padding:20px}
+        .modal{background:#fff;border-radius:16px;padding:30px;text-align:center;color:#333;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(255,0,0,0.3);border:3px solid #f44336;max-height:90vh;overflow-y:auto}
         .modal-icon{font-size:4em;margin-bottom:10px}.modal h2{color:#c62828;margin:10px 0}
         .auth-center{display:flex;justify-content:center;align-items:center;min-height:calc(100vh - 30px);padding:20px}
         .auth-box{background:rgba(255,255,255,0.97);border-radius:18px;padding:30px;width:420px;text-align:center;color:#333;box-shadow:0 15px 50px rgba(255,215,0,0.1)}
         .auth-box img{width:70px;margin-bottom:8px}.auth-box h1{color:#0a0a2a;font-size:1.8em}.auth-box>p{color:#888;font-size:13px;margin-bottom:15px}
-        .auth-box input{width:100%;padding:11px;margin:6px 0;border:2px solid #ddd;border-radius:8px;font-size:14px}
-        .auth-box input:focus{border-color:#FFD700;outline:none}
+        .auth-box input,.auth-box select{width:100%;padding:11px;margin:6px 0;border:2px solid #ddd;border-radius:8px;font-size:14px}
+        .auth-box input:focus,.auth-box select:focus{border-color:#FFD700;outline:none}
+        .phone-row{display:flex;gap:6px}
+        .phone-row select{flex:0 0 110px}
+        .phone-row input{flex:1}
         .btn{width:100%;padding:12px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer;background:linear-gradient(135deg,#FFD700,#FFA000);color:#0a0a2a;margin-top:8px}
         .btn:disabled{opacity:.6;cursor:not-allowed}.btn-sm{padding:6px 12px;font-size:11px;width:auto;margin:2px;border-radius:5px;cursor:pointer;font-weight:bold;border:none;color:#fff;display:inline-block}
         .link{color:#FFA000;cursor:pointer;font-weight:bold;text-decoration:underline;font-size:13px}
         .msg{margin-top:10px;font-size:12px;font-weight:bold;padding:10px;border-radius:6px}
         .msg.e{background:#ffebee;color:#d32f2f}.msg.s{background:#e8f5e9;color:#388E3C}
         .rules{font-size:11px;color:#aaa;margin:4px 0;line-height:1.4;text-align:left}
-        .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;background:rgba(255,255,255,.04);border-radius:10px;margin:12px auto;max-width:900px;border:1px solid rgba(255,215,0,0.08)}
+        .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;background:rgba(255,255,255,.04);border-radius:10px;margin:12px auto;max-width:900px;border:1px solid rgba(255,215,0,0.08);flex-wrap:wrap;gap:8px}
         .topbar span{color:#FFD700;font-weight:bold;font-size:0.95em}
         .topbar button{background:transparent;border:1px solid #f44336;color:#f44336;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:0.85em}
+        .topbar .admin-btn{border-color:#FFD700;color:#FFD700}
         .container{max-width:900px;margin:0 auto;padding:12px}
         .header{text-align:center;margin:18px 0}.header h1{font-size:2.2em;color:#FFD700;letter-spacing:5px}.header p{color:#aaa;font-size:0.9em;margin-top:4px}
         .card{background:rgba(255,255,255,0.97);color:#333;border-radius:14px;padding:18px;margin:12px 0;box-shadow:0 5px 20px rgba(0,0,0,0.15)}
@@ -61,6 +65,29 @@
         .err{background:#ffebee;color:#c62828;padding:10px;border-radius:6px;margin:8px 0;font-size:0.9em}
         .surebet{background:#e8f5e9;color:#2e7d32;padding:15px;border-radius:10px;border-left:4px solid #4CAF50;margin:8px 0;font-size:0.95em}
         .footer{text-align:center;margin-top:15px;opacity:0.6;font-size:0.8em}
+        /* AFFILIATION */
+        .affil-box{background:linear-gradient(135deg,#1a1a3e,#0d47a1);padding:16px;border-radius:12px;color:#fff}
+        .affil-box h4{color:#FFD700;margin-bottom:8px}
+        .affil-link{background:rgba(255,255,255,0.1);padding:10px;border-radius:8px;font-size:12px;word-break:break-all;margin:8px 0;border:1px dashed #FFD700}
+        .affil-share{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+        .share-btn{flex:1;min-width:100px;padding:9px;border-radius:8px;border:none;font-weight:bold;cursor:pointer;font-size:12px;color:#fff}
+        .share-wa{background:#25D366}.share-fb{background:#1877F2}.share-copy{background:#FFD700;color:#0a0a2a}
+        .affil-stats{display:flex;gap:10px;margin-top:12px}
+        .affil-stat{flex:1;background:rgba(255,255,255,0.1);padding:10px;border-radius:8px;text-align:center}
+        .affil-stat .num{font-size:1.6em;font-weight:bold;color:#FFD700}
+        .affil-stat .lbl{font-size:11px;color:#ccc}
+        .filleul-item{background:#f8f8f8;padding:8px 10px;border-radius:6px;margin:4px 0;font-size:12px;display:flex;justify-content:space-between}
+        /* ADMIN */
+        .admin-table{width:100%;border-collapse:collapse;font-size:12px}
+        .admin-table th{background:#0a0a2a;color:#FFD700;padding:8px;text-align:left;position:sticky;top:0}
+        .admin-table td{padding:8px;border-bottom:1px solid #eee}
+        .admin-table tr:hover{background:#f9f9f9}
+        .admin-search{width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;margin-bottom:12px;font-size:14px}
+        .badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:bold}
+        .badge.ok{background:#e8f5e9;color:#2e7d32}
+        .badge.no{background:#ffebee;color:#c62828}
+        .admin-actions button{padding:4px 8px;font-size:10px;margin:1px;border-radius:5px;border:none;cursor:pointer;color:#fff}
+        .table-scroll{overflow-x:auto;max-height:70vh;overflow-y:auto}
     </style>
 </head>
 <body>
@@ -76,6 +103,7 @@
 <div class="toast-container" id="toastContainer"></div>
 <div id="modalContainer"></div>
 
+<!-- ============ PAGE AUTH ============ -->
 <div class="page active" id="authPage">
 <div class="auth-center"><div class="auth-box">
 <div id="loginForm">
@@ -89,6 +117,25 @@
 <img src="logo.svg" alt="BETPOWO" onerror="this.style.display='none'"><h1>BETPOWO</h1><p>Inscription 🏆</p>
 <input type="text" id="regNom" placeholder="Ton vrai NOM"><input type="text" id="regPrenom" placeholder="Ton vrai PRÉNOM">
 <input type="text" id="regUser" placeholder="Pseudo (3-20 car, pas d'espaces)"><div class="rules">✅ Lettres, chiffres et symboles</div>
+<div class="phone-row">
+  <select id="regIndicatif">
+    <option value="+229">🇧🇯 +229</option>
+    <option value="+225">🇨🇮 +225</option>
+    <option value="+221">🇸🇳 +221</option>
+    <option value="+228">🇹🇬 +228</option>
+    <option value="+233">🇬🇭 +233</option>
+    <option value="+234">🇳🇬 +234</option>
+    <option value="+226">🇧🇫 +226</option>
+    <option value="+223">🇲🇱 +223</option>
+    <option value="+241">🇬🇦 +241</option>
+    <option value="+237">🇨🇲 +237</option>
+    <option value="+243">🇨🇩 +243</option>
+    <option value="+33">🇫🇷 +33</option>
+    <option value="+1">🇺🇸 +1</option>
+  </select>
+  <input type="tel" id="regTel" placeholder="Numéro WhatsApp">
+</div>
+<div class="rules" style="color:#1565C0">📱 Important pour être ajouté au groupe</div>
 <input type="password" id="regPass" placeholder="Mot de passe (6+ car)"><input type="password" id="regPass2" placeholder="Confirme">
 <div class="rules" style="color:#E65100">⚠️ Différent du pseudo !</div>
 <div class="rules" style="color:#E65100;font-weight:bold;text-align:center">🚨 NOTE BIEN tes identifiants ! Aucune récupération possible.</div>
@@ -99,8 +146,15 @@
 </div></div>
 </div>
 
+<!-- ============ PAGE PRINCIPALE ============ -->
 <div class="page" id="mainPage">
-<div class="topbar"><span>⚡ BETPOWO <span style="font-size:10px;color:#4CAF50">🕗 8H-00H</span></span><span style="color:#fff;font-size:13px" id="userDisplay"></span><span id="clockBadge" style="font-size:11px;padding:3px 8px;border-radius:14px;font-weight:bold"></span><button onclick="logout()">🚪 Déconnexion</button></div>
+<div class="topbar">
+<span>⚡ BETPOWO <span style="font-size:10px;color:#4CAF50">🕗 8H-00H</span></span>
+<span style="color:#fff;font-size:13px" id="userDisplay"></span>
+<span id="clockBadge" style="font-size:11px;padding:3px 8px;border-radius:14px;font-weight:bold"></span>
+<button class="admin-btn" id="adminBtn" style="display:none" onclick="openAdmin()">⚙️ ADMIN</button>
+<button onclick="logout()">🚪 Déconnexion</button>
+</div>
 <div class="container">
 
 <div id="mobileMsg" style="display:none;background:#fff3e0;color:#E65100;padding:10px;border-radius:8px;margin:10px 0;text-align:center;font-weight:bold;font-size:13px;border:2px solid #FF9800">
@@ -108,6 +162,25 @@
 </div>
 
 <div class="header"><h1>💰 BETPOWO 💰</h1><p>🎯 Arbitrage Gagnant • 🛡️ Anti-détection • 💎 Profits garantis</p></div>
+
+<!-- AFFILIATION -->
+<div class="card">
+<h3>🔗 Mon Lien d'Affiliation</h3>
+<div class="affil-box">
+<h4>📢 Invite tes amis et suis tes parrainages</h4>
+<div class="affil-link" id="affilLink"></div>
+<div class="affil-share">
+<button class="share-btn share-wa" onclick="shareWA()">💬 WhatsApp</button>
+<button class="share-btn share-fb" onclick="shareFB()">📘 Facebook</button>
+<button class="share-btn share-copy" onclick="copyAffilLink()">📋 Copier le lien</button>
+</div>
+<div class="affil-stats">
+<div class="affil-stat"><div class="num" id="filleulsCount">0</div><div class="lbl">Filleuls</div></div>
+<div class="affil-stat"><div class="num" id="parrainNom">-</div><div class="lbl">Parrainé par</div></div>
+</div>
+</div>
+<div id="filleulsList" style="margin-top:10px"></div>
+</div>
 
 <div class="card"><h3>📊 1. Tes Cotes</h3>
 <div class="odds"><div><div>⭐ FAVORIS</div><input type="number" id="cF" step="0.01" value="2.50"></div><div><div>🤝 NUL</div><input type="number" id="cN" step="0.01" value="4.00"></div><div><div>💀 OUTSIDER</div><input type="number" id="cO" step="0.01" value="5.00"></div></div>
@@ -131,6 +204,57 @@
 </div>
 </div>
 
+<!-- ============ PAGE ADMIN ============ -->
+<div class="page" id="adminPage">
+<div class="topbar">
+<span>⚙️ ADMIN BETPOWO</span>
+<button onclick="closeAdmin()">← Retour</button>
+</div>
+<div class="container">
+<div class="card">
+<h3>👥 Tous les utilisateurs</h3>
+<input type="text" class="admin-search" id="adminSearch" placeholder="🔍 Rechercher par pseudo, nom, téléphone..." oninput="renderAdminTable()">
+<div class="table-scroll">
+<table class="admin-table">
+<thead><tr>
+<th>Pseudo</th><th>Nom complet</th><th>Téléphone</th><th>Parrainé par</th><th>Filleuls</th><th>Calculs</th><th>Statut</th><th>Inscrit le</th><th>Actions</th>
+</tr></thead>
+<tbody id="adminTableBody"></tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ============ POPUP TÉLÉPHONE OBLIGATOIRE ============ -->
+<div class="modal-overlay" id="phoneModalOverlay" style="display:none">
+<div class="modal">
+<div class="modal-icon">📱</div>
+<h2>Numéro requis !</h2>
+<p style="color:#555;font-size:14px;margin:10px 0;line-height:1.5">Pour t'ajouter au <b>groupe WhatsApp privé BETPOWO</b> et te faire profiter des alertes et bonus, nous avons besoin de ton numéro WhatsApp.</p>
+<div class="phone-row" style="margin:15px 0">
+  <select id="phoneModalIndicatif">
+    <option value="+229">🇧🇯 +229</option>
+    <option value="+225">🇨🇮 +225</option>
+    <option value="+221">🇸🇳 +221</option>
+    <option value="+228">🇹🇬 +228</option>
+    <option value="+233">🇬🇭 +233</option>
+    <option value="+234">🇳🇬 +234</option>
+    <option value="+226">🇧🇫 +226</option>
+    <option value="+223">🇲🇱 +223</option>
+    <option value="+241">🇬🇦 +241</option>
+    <option value="+237">🇨🇲 +237</option>
+    <option value="+243">🇨🇩 +243</option>
+    <option value="+33">🇫🇷 +33</option>
+    <option value="+1">🇺🇸 +1</option>
+  </select>
+  <input type="tel" id="phoneModalInput" placeholder="Ton numéro WhatsApp">
+</div>
+<button class="btn" onclick="submitPhone()">✅ Valider mon numéro</button>
+<div id="phoneModalMsg"></div>
+</div>
+</div>
+
 <script>
 // BILLETS
 (function(){var bg=document.getElementById('bgBills');var b=['💵','💶','💷','💴','💰'];for(var i=0;i<12;i++){var el=document.createElement('div');el.className='bill';el.textContent=b[Math.floor(Math.random()*b.length)];el.style.left=Math.random()*100+'%';el.style.animationDuration=(Math.random()*15+10)+'s';el.style.animationDelay=Math.random()*12+'s';bg.appendChild(el)}})();
@@ -142,6 +266,15 @@ var SK='bp_session_v3'
 
 // MOBILE DETECTION
 (function(){if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent))document.getElementById('mobileMsg').style.display='block'})()
+
+// ============ CAPTURE LIEN AFFILIATION ============
+(function(){
+    var params = new URLSearchParams(window.location.search);
+    var ref = params.get('ref');
+    if(ref){
+        localStorage.setItem('bp_ref', ref.toLowerCase());
+    }
+})();
 
 function showToast(msg,type,duration){type=type||'info';duration=duration||3000;var ic={success:'✅',error:'❌',info:'ℹ️',warning:'⚠️',critical:'🚨'};var c=document.getElementById('toastContainer');var t=document.createElement('div');t.className='toast '+type;t.innerHTML='<span>'+ic[type]+'</span> '+msg;c.appendChild(t);if(duration>0&&type!=='critical')setTimeout(function(){if(t.parentElement)t.remove()},duration)}
 function showModal(icon,title,msg,btnText,cb){var c=document.getElementById('modalContainer');var o=document.createElement('div');o.className='modal-overlay';o.innerHTML='<div class="modal"><div class="modal-icon">'+icon+'</div><h2>'+title+'</h2><div>'+msg+'</div>'+(btnText?'<button class="btn">'+btnText+'</button>':'')+'</div>';c.appendChild(o);if(btnText&&cb)o.querySelector('.btn').onclick=function(){o.remove();cb()};o.addEventListener('click',function(e){if(e.target===o)o.remove()})}
@@ -156,7 +289,10 @@ function getIP(){return fetch('https://api.ipify.org?format=json').then(function
 async function register(){
     var nom=document.getElementById('regNom').value.trim(),prenom=document.getElementById('regPrenom').value.trim()
     var username=document.getElementById('regUser').value.trim(),pass=document.getElementById('regPass').value,pass2=document.getElementById('regPass2').value,b=document.getElementById('regBtn')
+    var indicatif=document.getElementById('regIndicatif').value, telBrut=document.getElementById('regTel').value.trim()
     if(!nom||!prenom||!username||!pass||!pass2){showToast('❌ Tous les champs obligatoires','error');return}
+    if(!telBrut||telBrut.length<6){showToast('❌ Numéro WhatsApp requis','error',3500);return}
+    var telephone = indicatif + ' ' + telBrut.replace(/\s+/g,'')
     if(!/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/.test(username)||username.length<3||username.length>20){showToast('❌ Pseudo invalide','error',4000);return}
     if(pass.length<6){showToast('❌ 6 caractères minimum','error');return}
     if(pass!==pass2){showToast('❌ Mots de passe différents','error');return}
@@ -169,8 +305,15 @@ async function register(){
         if((await checkIP.json()).length>0){showToast('⛔ UN SEUL COMPTE PAR TÉLÉPHONE !','critical',0);b.disabled=false;b.textContent='✅ Créer mon compte';return}
         var checkUser=await fetch(SB_URL+'/rest/v1/users?username=eq.'+encodeURIComponent(username.toLowerCase())+'&select=id',{headers:SB_H})
         if((await checkUser.json()).length>0){showToast('❌ Pseudo déjà pris','error',4000);b.disabled=false;b.textContent='✅ Créer mon compte';return}
-        var resp=await fetch(SB_URL+'/rest/v1/users',{method:'POST',headers:SB_H,body:JSON.stringify({nom:nom,prenom:prenom,username:username.toLowerCase(),password:pass,ip_address:ip})})
+
+        var parrainPar = localStorage.getItem('bp_ref') || null
+
+        var resp=await fetch(SB_URL+'/rest/v1/users',{method:'POST',headers:SB_H,body:JSON.stringify({
+            nom:nom,prenom:prenom,username:username.toLowerCase(),password:pass,ip_address:ip,
+            telephone:telephone, parraine_par:parrainPar
+        })})
         if(resp.ok){
+            localStorage.removeItem('bp_ref')
             var ids='Pseudo : '+username.toLowerCase()+'\nMot de passe : '+pass
             showModal('⚠️','GARDE TES IDENTIFIANTS !','<div style="background:#0a0a2a;color:#FFD700;padding:15px;border-radius:10px;text-align:left;margin:10px 0">'+ids.replace(/\n/g,'<br>')+'</div><p style="color:#c62828;font-weight:bold">🚨 AUCUNE RÉCUPÉRATION POSSIBLE !</p>','📋 COPIER',function(){navigator.clipboard.writeText(ids);showToast('✅ Copié !','success',6000)})
             showToast('⚠️ COPIE TES IDENTIFIANTS !','critical',0)
@@ -191,16 +334,164 @@ async function login(){
         var u=users[0]
         if(u.bloque){showToast('⛔ COMPTE BLOQUÉ','critical',0);b.disabled=false;b.textContent='🔓 Se connecter';return}
         if(u.limite_calculs!==null&&u.calculs_effectues>=u.limite_calculs){showToast('⛔ LIMITE ATTEINTE','critical',0);b.disabled=false;b.textContent='🔓 Se connecter';return}
-        localStorage.setItem(SK,JSON.stringify({username:u.username,nom:u.nom,prenom:u.prenom,id:u.id,time:Date.now()}))
-        document.getElementById('userDisplay').textContent=u.prenom+' '+u.nom
-        document.getElementById('authPage').classList.remove('active');document.getElementById('mainPage').classList.add('active')
-        showToast('👋 Bienvenue '+u.prenom+' ! 💰','success',3000);calc();b.disabled=false;b.textContent='🔓 Se connecter'
+        localStorage.setItem(SK,JSON.stringify({username:u.username,nom:u.nom,prenom:u.prenom,id:u.id,is_admin:u.is_admin,time:Date.now()}))
+        enterApp(u)
+        b.disabled=false;b.textContent='🔓 Se connecter'
     }catch(e){showToast('❌ Erreur réseau','error');b.disabled=false;b.textContent='🔓 Se connecter'}
 }
 
-function logout(){localStorage.removeItem(SK);document.getElementById('mainPage').classList.remove('active');document.getElementById('authPage').classList.add('active');showLogin();showToast('👋 Déconnecté','info',1500)}
-(function(){var s=localStorage.getItem(SK);if(s){var d=JSON.parse(s);document.getElementById('userDisplay').textContent=d.prenom+' '+d.nom;document.getElementById('authPage').classList.remove('active');document.getElementById('mainPage').classList.add('active');showToast('👋 Rebienvenue '+d.prenom+' ! 💰','success',2500);calc()}})()
+function enterApp(u){
+    document.getElementById('userDisplay').textContent=u.prenom+' '+u.nom
+    document.getElementById('authPage').classList.remove('active');document.getElementById('mainPage').classList.add('active')
+    showToast('👋 Bienvenue '+u.prenom+' ! 💰','success',3000)
+    if(u.is_admin){ document.getElementById('adminBtn').style.display='inline-block' }
+    if(!u.telephone){
+        document.getElementById('phoneModalOverlay').style.display='flex'
+    } else {
+        calc()
+        loadAffiliation(u)
+    }
+}
+
+function logout(){localStorage.removeItem(SK);document.getElementById('mainPage').classList.remove('active');document.getElementById('adminPage').classList.remove('active');document.getElementById('authPage').classList.add('active');showLogin();showToast('👋 Déconnecté','info',1500)}
+
+(function(){
+    var s=localStorage.getItem(SK)
+    if(s){
+        var d=JSON.parse(s)
+        fetch(SB_URL+'/rest/v1/users?id=eq.'+d.id+'&select=*',{headers:SB_H}).then(function(r){return r.json()}).then(function(users){
+            if(users.length>0){ enterApp(users[0]) }
+        })
+    }
+})()
+
 document.addEventListener('keypress',function(e){if(e.key!=='Enter')return;if(document.getElementById('loginForm').style.display!=='none')login();else if(document.getElementById('regForm').style.display!=='none')register()})
+
+// ============ TÉLÉPHONE OBLIGATOIRE (anciens comptes) ============
+async function submitPhone(){
+    var indicatif=document.getElementById('phoneModalIndicatif').value
+    var tel=document.getElementById('phoneModalInput').value.trim()
+    var msgEl=document.getElementById('phoneModalMsg')
+    if(!tel||tel.length<6){msgEl.innerHTML='<div class="msg e">❌ Numéro invalide</div>';return}
+    var telephone=indicatif+' '+tel.replace(/\s+/g,'')
+    var s=localStorage.getItem(SK)
+    if(!s)return
+    var d=JSON.parse(s)
+    try{
+        await fetch(SB_URL+'/rest/v1/users?id=eq.'+d.id,{method:'PATCH',headers:SB_H,body:JSON.stringify({telephone:telephone})})
+        document.getElementById('phoneModalOverlay').style.display='none'
+        showToast('✅ Numéro enregistré ! Tu seras ajouté au groupe.','success',4000)
+        var resp=await fetch(SB_URL+'/rest/v1/users?id=eq.'+d.id+'&select=*',{headers:SB_H})
+        var users=await resp.json()
+        if(users.length>0){ calc(); loadAffiliation(users[0]) }
+    }catch(e){msgEl.innerHTML='<div class="msg e">❌ Erreur réseau, réessaie</div>'}
+}
+
+// ============ AFFILIATION ============
+async function loadAffiliation(u){
+    var link = window.location.origin + '/?ref=' + u.username
+    document.getElementById('affilLink').textContent = link
+    window._affilLink = link
+
+    if(u.parraine_par){
+        document.getElementById('parrainNom').textContent = u.parraine_par
+    } else {
+        document.getElementById('parrainNom').textContent = '-'
+    }
+
+    try{
+        var resp = await fetch(SB_URL+'/rest/v1/users?parraine_par=eq.'+encodeURIComponent(u.username)+'&select=username,prenom,nom,created_at', {headers:SB_H})
+        var filleuls = await resp.json()
+        document.getElementById('filleulsCount').textContent = filleuls.length
+        var listEl = document.getElementById('filleulsList')
+        if(filleuls.length===0){
+            listEl.innerHTML = '<p style="color:#999;font-size:12px;text-align:center">Aucun filleul pour l\'instant. Partage ton lien !</p>'
+        } else {
+            listEl.innerHTML = filleuls.map(function(f){
+                var date = new Date(f.created_at).toLocaleDateString('fr-FR')
+                return '<div class="filleul-item"><span>👤 '+f.prenom+' '+f.nom+' (@'+f.username+')</span><span style="color:#999">'+date+'</span></div>'
+            }).join('')
+        }
+    }catch(e){}
+}
+
+function shareWA(){
+    var text = encodeURIComponent('💰 Découvre BETPOWO, l\'outil qui te garantit des gains sur tes paris ! Inscris-toi ici : ' + window._affilLink)
+    window.open('https://wa.me/?text='+text, '_blank')
+}
+function shareFB(){
+    window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(window._affilLink), '_blank')
+}
+function copyAffilLink(){
+    navigator.clipboard.writeText(window._affilLink).then(function(){
+        showToast('📋 Lien copié !','success',2000)
+    })
+}
+
+// ============ ADMIN ============
+var adminUsersCache = []
+async function openAdmin(){
+    document.getElementById('mainPage').classList.remove('active')
+    document.getElementById('adminPage').classList.add('active')
+    showToast('⏳ Chargement des données...','info',1500)
+    try{
+        var resp = await fetch(SB_URL+'/rest/v1/users?select=*&order=created_at.desc',{headers:SB_H})
+        adminUsersCache = await resp.json()
+        renderAdminTable()
+    }catch(e){showToast('❌ Erreur chargement admin','error')}
+}
+function closeAdmin(){
+    document.getElementById('adminPage').classList.remove('active')
+    document.getElementById('mainPage').classList.add('active')
+}
+function renderAdminTable(){
+    var search = (document.getElementById('adminSearch').value || '').toLowerCase()
+    var filtered = adminUsersCache.filter(function(u){
+        if(!search) return true
+        return (u.username||'').toLowerCase().includes(search) ||
+               (u.nom||'').toLowerCase().includes(search) ||
+               (u.prenom||'').toLowerCase().includes(search) ||
+               (u.telephone||'').toLowerCase().includes(search)
+    })
+    var byParrain = {}
+    adminUsersCache.forEach(function(u){
+        if(u.parraine_par){
+            byParrain[u.parraine_par] = (byParrain[u.parraine_par]||0)+1
+        }
+    })
+    var tbody = document.getElementById('adminTableBody')
+    tbody.innerHTML = filtered.map(function(u){
+        var date = new Date(u.created_at).toLocaleDateString('fr-FR')
+        var filleulsCount = byParrain[u.username] || 0
+        var telBadge = u.telephone ? '<span class="badge ok">'+u.telephone+'</span>' : '<span class="badge no">Manquant</span>'
+        var statutBadge = u.bloque ? '<span class="badge no">Bloqué</span>' : '<span class="badge ok">Actif</span>'
+        return '<tr>'+
+            '<td><b>@'+u.username+'</b>'+(u.is_admin?' 👑':'')+'</td>'+
+            '<td>'+u.prenom+' '+u.nom+'</td>'+
+            '<td>'+telBadge+'</td>'+
+            '<td>'+(u.parraine_par?'@'+u.parraine_par:'-')+'</td>'+
+            '<td style="text-align:center;font-weight:bold;color:#FFA000">'+filleulsCount+'</td>'+
+            '<td style="text-align:center">'+u.calculs_effectues+'</td>'+
+            '<td>'+statutBadge+'</td>'+
+            '<td>'+date+'</td>'+
+            '<td class="admin-actions">'+
+                (u.bloque ?
+                    '<button style="background:#4CAF50" onclick="toggleBloque('+u.id+',false)">Débloquer</button>' :
+                    '<button style="background:#f44336" onclick="toggleBloque('+u.id+',true)">Bloquer</button>'
+                )+
+            '</td>'+
+        '</tr>'
+    }).join('')
+}
+async function toggleBloque(userId, newState){
+    try{
+        await fetch(SB_URL+'/rest/v1/users?id=eq.'+userId,{method:'PATCH',headers:SB_H,body:JSON.stringify({bloque:newState})})
+        showToast(newState?'⛔ Compte bloqué':'✅ Compte débloqué','success',2000)
+        var idx = adminUsersCache.findIndex(function(u){return u.id===userId})
+        if(idx>=0) adminUsersCache[idx].bloque = newState
+        renderAdminTable()
+    }catch(e){showToast('❌ Erreur','error')}
+}
 
 // ============ CALCULS 100% INTACTS ============
 var mode='fav_nul'
