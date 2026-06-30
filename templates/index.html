@@ -133,9 +133,9 @@
     <option value="+33">🇫🇷 +33</option>
     <option value="+1">🇺🇸 +1</option>
   </select>
-  <input type="tel" id="regTel" placeholder="Numéro WhatsApp">
+  <input type="tel" id="regTel" placeholder="xx xx xx xx" maxlength="11" oninput="formatPhoneInput(this)">
 </div>
-<div class="rules" style="color:#1565C0">📱 Important pour être ajouté au groupe</div>
+<div class="rules" style="color:#1565C0">📱 Format : xx xx xx xx — Important pour être ajouté au groupe</div>
 <input type="password" id="regPass" placeholder="Mot de passe (6+ car)"><input type="password" id="regPass2" placeholder="Confirme">
 <div class="rules" style="color:#E65100">⚠️ Différent du pseudo !</div>
 <div class="rules" style="color:#E65100;font-weight:bold;text-align:center">🚨 NOTE BIEN tes identifiants ! Aucune récupération possible.</div>
@@ -248,7 +248,7 @@
     <option value="+33">🇫🇷 +33</option>
     <option value="+1">🇺🇸 +1</option>
   </select>
-  <input type="tel" id="phoneModalInput" placeholder="Ton numéro WhatsApp">
+  <input type="tel" id="phoneModalInput" placeholder="xx xx xx xx" maxlength="11" oninput="formatPhoneInput(this)">
 </div>
 <button class="btn" onclick="submitPhone()">✅ Valider mon numéro</button>
 <div id="phoneModalMsg"></div>
@@ -286,13 +286,20 @@ function showLogin(){document.getElementById('regForm').style.display='none';doc
 function copyRegInfo(){var u=document.getElementById('regUser').value.trim(),p=document.getElementById('regPass').value;if(!u||!p){showToast('Remplis pseudo et mot de passe','warning',2500);return}navigator.clipboard.writeText('Pseudo : '+u+'\nMot de passe : '+p).then(function(){showToast('📋 Copié !','success',4000)})}
 function getIP(){return fetch('https://api.ipify.org?format=json').then(function(r){return r.json()}).then(function(d){return d.ip}).catch(function(){return '0.0.0.0'})}
 
+function formatPhoneInput(el){
+    var digits = el.value.replace(/\D/g,'').slice(0,8)
+    var groups = digits.match(/.{1,2}/g) || []
+    el.value = groups.join(' ')
+}
+
 async function register(){
     var nom=document.getElementById('regNom').value.trim(),prenom=document.getElementById('regPrenom').value.trim()
     var username=document.getElementById('regUser').value.trim(),pass=document.getElementById('regPass').value,pass2=document.getElementById('regPass2').value,b=document.getElementById('regBtn')
     var indicatif=document.getElementById('regIndicatif').value, telBrut=document.getElementById('regTel').value.trim()
     if(!nom||!prenom||!username||!pass||!pass2){showToast('❌ Tous les champs obligatoires','error');return}
-    if(!telBrut||telBrut.length<6){showToast('❌ Numéro WhatsApp requis','error',3500);return}
-    var telephone = indicatif + ' ' + telBrut.replace(/\s+/g,'')
+    if(!telBrut||telBrut.replace(/\s/g,'').length<6){showToast('❌ Numéro WhatsApp requis','error',3500);return}
+    if(indicatif==='+229' && telBrut.replace(/\s/g,'').length!==8){showToast('❌ Numéro Bénin : 8 chiffres requis (xx xx xx xx)','error',3500);return}
+    var telephone = indicatif + ' ' + telBrut.trim()
     if(!/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/.test(username)||username.length<3||username.length>20){showToast('❌ Pseudo invalide','error',4000);return}
     if(pass.length<6){showToast('❌ 6 caractères minimum','error');return}
     if(pass!==pass2){showToast('❌ Mots de passe différents','error');return}
@@ -372,8 +379,9 @@ async function submitPhone(){
     var indicatif=document.getElementById('phoneModalIndicatif').value
     var tel=document.getElementById('phoneModalInput').value.trim()
     var msgEl=document.getElementById('phoneModalMsg')
-    if(!tel||tel.length<6){msgEl.innerHTML='<div class="msg e">❌ Numéro invalide</div>';return}
-    var telephone=indicatif+' '+tel.replace(/\s+/g,'')
+    if(!tel||tel.replace(/\s/g,'').length<6){msgEl.innerHTML='<div class="msg e">❌ Numéro invalide</div>';return}
+    if(indicatif==='+229' && tel.replace(/\s/g,'').length!==8){msgEl.innerHTML='<div class="msg e">❌ Numéro Bénin : 8 chiffres requis (xx xx xx xx)</div>';return}
+    var telephone=indicatif+' '+tel.trim()
     var s=localStorage.getItem(SK)
     if(!s)return
     var d=JSON.parse(s)
